@@ -26,6 +26,23 @@ const userSchema = new mongoose.Schema({
     required: true,
     select: false,
   },
+  razorpayCustomerId: {
+    type: String,
+  },
+  razorpaySecectKey: {
+    type: String,
+  },
+  bankDetails: {
+    accountNumber: {
+      type: String,
+    },
+    ifsc: {
+      type: String,
+    },
+    accountHolderName: {
+      type: String,
+    },
+  },
   businessName: {
     type: String,
   },

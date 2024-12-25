@@ -5,6 +5,7 @@ const app = express();
 const cors = require("cors");
 const connectDB = require("./db/db.js");
 const userRoute = require("./routes/user.routes.js");
+const authRoute = require("./routes/auth.routes.js");
 const employeeRoute = require("./routes/employee.routes.js");
 const paymentRoute = require("./routes/razorpay.routes.js");
 const cookieParser = require('cookie-parser');
@@ -22,6 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use("/api/user",userRoute);
+app.use("/api/auth",authRoute);
 app.use("/api/employee",employeeRoute);
 app.use("/api/payment",paymentRoute);
 
