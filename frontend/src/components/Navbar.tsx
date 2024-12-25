@@ -48,7 +48,7 @@ const Navbar = () => {
 
 
   return (
-    <nav className="bg-white text-black  shadow-xl dark:shadow-gray-400/50 flex items-center justify-between absolute bottom-8 left-[50%] -translate-x-[50%] rounded-lg">
+    <nav className="z-50 bg-white text-black  shadow-xl dark:shadow-gray-400/50 flex items-center justify-between fixed bottom-8 left-[50%] -translate-x-[50%] rounded-lg">
       {/* Dialog button */}
       <div className="text-xl font-bold h-full bg-black dark:bg-secondary text-white rounded-l-lg">
         <button
@@ -77,10 +77,10 @@ const Navbar = () => {
           <svg
             stroke="currentColor"
             fill="none"
-            stroke-width="2"
+            strokeWidth="2"
             viewBox="0 0 24 24"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             height="1em"
             width="1em"
             xmlns="http://www.w3.org/2000/svg"
@@ -98,10 +98,10 @@ const Navbar = () => {
           <svg
             stroke="currentColor"
             fill="none"
-            stroke-width="2"
+            strokeWidth="2"
             viewBox="0 0 24 24"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             height="1em"
             width="1em"
             xmlns="http://www.w3.org/2000/svg"
@@ -119,10 +119,10 @@ const Navbar = () => {
           <svg
             stroke="currentColor"
             fill="none"
-            stroke-width="2"
+            strokeWidth="2"
             viewBox="0 0 24 24"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             height="1em"
             width="1em"
             xmlns="http://www.w3.org/2000/svg"
@@ -139,10 +139,10 @@ const Navbar = () => {
           <svg
             stroke="currentColor"
             fill="none"
-            stroke-width="2"
+            strokeWidth="2"
             viewBox="0 0 24 24"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             height="1em"
             width="1em"
             xmlns="http://www.w3.org/2000/svg"

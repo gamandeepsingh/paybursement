@@ -5,31 +5,32 @@ import { signOutUserSuccess, updateUserSuccess } from './redux/user/userSlice';
 import './App.css'
 import { Toaster } from 'react-hot-toast';
 import Navbar from './components/Navbar';
+import { Outlet } from 'react-router-dom';
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 axios.defaults.withCredentials = true;
 axios.defaults.headers.common['X-API-Key'] = import.meta.env.VITE_BACKEND_API_KEY; 
 
 function App() {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  useEffect(() => {
-    const checkTokenValidity = async () => {
-      try {
-        const res = await axios.get(`/api/auth/check-token`);
-        const data = res.data;
-        if (data.success === false) {
-          dispatch(signOutUserSuccess());
-        }
+  // useEffect(() => {
+  //   const checkTokenValidity = async () => {
+  //     try {
+  //       const res = await axios.get(`/api/auth/check-token`);
+  //       const data = res.data;
+  //       if (data.success === false) {
+  //         dispatch(signOutUserSuccess());
+  //       }
 
-        dispatch(updateUserSuccess(data.user));
-      } catch (error) {
-        console.error("Error checking token validity:", error);
-      }
-    };
+  //       dispatch(updateUserSuccess(data.user));
+  //     } catch (error) {
+  //       console.error("Error checking token validity:", error);
+  //     }
+  //   };
 
-    checkTokenValidity();
-  }, []);
+  //   checkTokenValidity();
+  // }, []);
 
   const [themeMode, setThemeMode] = useState(
     localStorage.getItem("themeMode") || "dark"
@@ -55,6 +56,7 @@ function App() {
   return (
     <>
     <Navbar/>
+    <Outlet />
       <Toaster
           position="bottom-right"
           toastOptions={{

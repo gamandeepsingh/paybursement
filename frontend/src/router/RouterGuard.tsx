@@ -10,5 +10,6 @@ type State = {
 export const PrivateRoute = () => {
   const { currentUser } = useSelector((state:State) => state.user);
 
-  return currentUser ? <Outlet /> : <Navigate to="/sign-in" />;
+  // return currentUser ? <Outlet /> : <Navigate to="/sign-in" />;
+  return  <Outlet />;
 };
