@@ -1,8 +1,10 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import axios from 'axios'
 import { useDispatch } from 'react-redux';
 import { signOutUserSuccess, updateUserSuccess } from './redux/user/userSlice';
 import './App.css'
+import { Toaster } from 'react-hot-toast';
+import Navbar from './components/Navbar';
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 axios.defaults.withCredentials = true;
@@ -28,11 +30,46 @@ function App() {
 
     checkTokenValidity();
   }, []);
+
+  const [themeMode, setThemeMode] = useState(
+    localStorage.getItem("themeMode") || "dark"
+  );
+
+  const darkTheme = useCallback(() => {
+    setThemeMode("dark");
+  }, []);
+
+  const lightTheme = useCallback(() => {
+    setThemeMode("light");
+  }, []);
+
+  useEffect(() => {
+    const updateTheme = () => {
+      document.documentElement.className = themeMode;
+      localStorage.setItem("themeMode", themeMode);
+    };
+
+    updateTheme();
+  }, [themeMode]);
   
   return (
-    <div>
-      <p className=''>Comeback to you soon :)</p>
-    </div>
+    <>
+    <Navbar/>
+      <Toaster
+          position="bottom-right"
+          toastOptions={{
+            duration: 2000,
+            style: {
+              background: "#32de8a",
+              fontSize: '12px',
+              color: "#000",
+              fontFamily: "Urbanist, 'sans-serif",
+              borderRadius: "100px",
+              boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.1)",
+            },
+          }}
+          />
+    </>
   )
 }
 
