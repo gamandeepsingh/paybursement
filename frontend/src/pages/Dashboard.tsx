@@ -96,10 +96,10 @@ const Dashboard = () => {
           <HeroSection />
           <BlockInTextCard
             examples={[
-              "Does your product work for SMBs?",
-              "Can I pause my membership without losing my data?",
-              "How does seat based pricing work?",
-              "What's the meaning of life?",
+              "How does Paybursement streamline reimbursement processes?",
+              "Can Paybursement be integrated with existing financial systems?",
+              "What security measures does Paybursement have in place?",
+              "How can Paybursement help reduce financial errors?",
             ]}
           />
         </div>
@@ -144,7 +144,7 @@ const Typewrite = ({ examples }: { examples: string[] }) => {
   return (
     <p className="mb-2.5 text-xs sm:text-lg font-light uppercase">
       <span className="">
-        EXAMPLE:{" "}
+      ANSWERING SOON:{" "}
         {examples[exampleIndex].split("").map((l, i) => (
           <motion.span
             initial={{
