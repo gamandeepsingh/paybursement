@@ -59,7 +59,7 @@ function App() {
     <Navbar/>
     <Outlet />
       <Toaster
-          position="bottom-left"
+          position="top-right"
           toastOptions={{
             duration: 2000,
             style: {

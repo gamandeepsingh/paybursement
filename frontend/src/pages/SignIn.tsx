@@ -29,9 +29,10 @@ const SignIn = () => {
       const res = await axios.post(`/api/user/sign-in`,formData);
       const {user,token} = await res.data;
       localStorage.setItem('token',token);
+      localStorage.setItem('user',JSON.stringify(user));
       dispatch(signInSuccess(user))
-      toast.success("Sign in successful")
       navigate('/dashboard')
+      toast.success("Sign in successful")
     } catch (error) {
       dispatch(signInFailure("Invalid credentials"))
       toast.error((error as any).response?.data?.message || (error as any).response?.data?.errors[0].msg || "Something went wrong")
@@ -39,10 +40,10 @@ const SignIn = () => {
     }
   }
   return (
-    <div className="container relative h-screen p-5 flex-col items-center justify-center grid max-w-none lg:grid-cols-2 lg:px-5">
+    <div className="container relative h-screen p-10 pt-16 flex-col items-center justify-center grid max-w-none lg:grid-cols-2 lg:px-5">
       <span
       onClick={()=>navigate('/sign-up')}
-      className="inline-flex cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 h-9 px-4 py-2 absolute right-4 top-4 md:right-8 md:top-8 bg-gray-500/20 dark:bg-gray-500/50 ">
+      className="inline-flex mt-7 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 h-9 px-4 py-2 absolute right-4 top-4 md:right-8 md:top-8 bg-gray-500/20 dark:bg-gray-500/50 ">
         Register
       </span>
       <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
@@ -100,7 +101,7 @@ const SignIn = () => {
                     name="email"
                     className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                     id="email"
-                    placeholder="name@example.com"
+                    placeholder="name@gmail.com"
                     onChange={handleChange}
                     autoCapitalize="none"
                     autoComplete="email"

@@ -4,12 +4,17 @@ import Dashboard from "../pages/Dashboard";
 import { PrivateRoute } from "./RouterGuard";
 import SignIn from "../pages/SignIn";
 import SignUp from "../pages/SignUp";
+import Home from "@/pages/Home";
 
 const router = createBrowserRouter([
     {
         path:"/",
         element: <App/>,
         children:[
+            {
+                path: "/",
+                element: <Home/>
+            },
             {
                 path: "/sign-in",
                 element: <SignIn/>
