@@ -1,13 +1,11 @@
-// store.js
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import userReducer from './user/userSlice';
-import themeReducer from './user/themeSlice';
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import userReducer from "./user/userSlice";
+import themeReducer from "./user/themeSlice";
 
 const rootReducer = combineReducers({
   user: userReducer,
   theme: themeReducer,
 });
-
 
 export const store = configureStore({
   reducer: rootReducer,
@@ -16,3 +14,6 @@ export const store = configureStore({
       serializableCheck: false,
     }),
 });
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
