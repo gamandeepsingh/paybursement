@@ -22,7 +22,7 @@ function App() {
     const checkTokenValidity = async () => {
       try {
         const res = await axios.get(`/api/user/profile`, {
-          headers: { Authorization: `${localStorage.getItem("token")}` },
+          headers: { Authorization: `bearer ${localStorage.getItem("token")}` },
           withCredentials: true,
         });
         const data = res.data;
