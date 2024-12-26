@@ -1,13 +1,11 @@
 import { useEffect } from 'react';
 import axios from 'axios'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { signOutUserSuccess, updateUserSuccess } from './redux/user/userSlice';
 import './App.css'
 import { Toaster } from 'react-hot-toast';
 import Navbar from './components/Navbar';
 import { Outlet } from 'react-router-dom';
-import { RootState } from './redux/store';
-import Loader from './components/Loader';
 import Banner from './components/Banner';
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
@@ -16,29 +14,37 @@ axios.defaults.headers.common['X-API-Key'] = import.meta.env.VITE_BACKEND_API_KE
 
 function App() {
   const dispatch = useDispatch();
-  const {loading} = useSelector((state:RootState) => state.user);
 
   useEffect(() => {
     const checkTokenValidity = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        dispatch(signOutUserSuccess());
+        return;
+      }
+  
       try {
         const res = await axios.get(`/api/user/profile`, {
-          headers: { Authorization: `bearer ${localStorage.getItem("token")}` },
+          headers: { Authorization: `bearer ${token}` },
           withCredentials: true,
         });
         const data = res.data;
-        if (data.success === false) {
+  
+        if (!data.success) {
           dispatch(signOutUserSuccess());
           return;
         }
+  
         dispatch(updateUserSuccess(data));
+        console.log("User data:", data);
       } catch (error) {
         console.error("Error checking token validity:", error);
         dispatch(signOutUserSuccess());
       }
     };
-
+  
     checkTokenValidity();
-  }, []);
+  }, [dispatch]);
 
   const themeMode = localStorage.getItem("themeMode") || "dark";
 
@@ -50,8 +56,6 @@ function App() {
 
     updateTheme();
   }, [themeMode]);
-
-  if(loading) return <div><Loader/></div>
   
   return (
     <>
@@ -59,7 +63,7 @@ function App() {
     <Navbar/>
     <Outlet />
       <Toaster
-          position="top-right"
+          position="top-center"
           toastOptions={{
             duration: 2000,
             style: {

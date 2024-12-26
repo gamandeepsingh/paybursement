@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 const SignIn = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate();
+  const [loading,setLoading] = useState(false);
   
   const [formData,setFormData] = useState({
     email: '',
@@ -23,6 +24,7 @@ const SignIn = () => {
 
   const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     try {
       if(formData.email === '' || formData.password === '') return toast.error("Please fill in all fields")
       dispatch(signInStart())
@@ -31,12 +33,13 @@ const SignIn = () => {
       localStorage.setItem('token',token);
       localStorage.setItem('user',JSON.stringify(user));
       dispatch(signInSuccess(user))
-      navigate('/dashboard')
-      toast.success("Sign in successful")
+      navigate('/dashboard', { state: { showToast: true } });
     } catch (error) {
       dispatch(signInFailure("Invalid credentials"))
       toast.error((error as any).response?.data?.message || (error as any).response?.data?.errors[0].msg || "Something went wrong")
       console.log(error);
+    }finally{
+      setLoading(false);
     }
   }
   return (
@@ -124,9 +127,12 @@ const SignIn = () => {
                     placeholder="your-password"
                   />
                 </div>
-                <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-secondary dark:bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2"
+                <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-secondary dark:bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 hover:text-white dark:hover:bg-secondary/90 dark:hover:text-primaryDark px-4 py-2"
+                disabled={loading}
                 >
-                  Sign In
+                  {
+                    loading ? "Signing..." : "Sign In"
+                  }
                 </button>
               </div>
             </form>

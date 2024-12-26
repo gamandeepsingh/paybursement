@@ -10,6 +10,9 @@ const Navbar = () => {
   const theme = useSelector((state: RootState) => state.theme.theme);
   const [isDialogVisible, setIsDialogVisible] = useState(false);
   const dialogRef = useRef<HTMLDivElement | null>(null);
+  const {currentUser} = useSelector((state: RootState) => state.user);
+  console.log(currentUser);
+  
 
   useEffect(() => {
     // Update the `dark` class on the root element
@@ -55,9 +58,9 @@ const Navbar = () => {
 
 
   return (
-    <nav className="z-50 bg-white text-black  shadow-xl dark:shadow-gray-400/50 flex items-center justify-between fixed bottom-8 left-[50%] -translate-x-[50%] rounded-lg">
+    <nav className="z-50 bg-white border border-black text-black  shadow-xl dark:shadow-gray-400/50 flex items-center justify-between fixed bottom-8 left-[50%] -translate-x-[50%] rounded-lg">
       {/* Dialog button */}
-      <div className="text-xl font-bold h-full bg-black dark:bg-secondary text-white rounded-l-lg">
+      {currentUser && <div className="text-xl font-bold h-full bg-black dark:bg-secondary text-white rounded-l-lg">
         <button
           onClick={handleDialogToggle}
           className="p-4 focus:outline-none transition-transform duration-300 ease-in-out"
@@ -73,9 +76,9 @@ const Navbar = () => {
             )}
           </span>
         </button>
-      </div>
+      </div>}
       {/* Navbar links */}
-      <div className="flex gap-2 sm:gap-6 px-6">
+      <div className="flex gap-2 sm:gap-6 px-6 p-2">
         <a
           href="/"
           rel="nofollow"
