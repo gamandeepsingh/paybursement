@@ -1,15 +1,12 @@
+import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
 
-type State = {
-  user: {
-    currentUser: any;
-  };
-}
-
 export const PrivateRoute = () => {
-  const { currentUser } = useSelector((state:State) => state.user);
+  const currentUser = useSelector((state: RootState) => state.user.currentUser);
+  
+  // Check if the currentUser has meaningful data (e.g., an `id` or `email` property)
+  const isAuthenticated = currentUser && typeof currentUser === "object" && Object.keys(currentUser).length > 0 ;
 
-  // return currentUser ? <Outlet /> : <Navigate to="/sign-in" />;
-  return  <Outlet />;
+  return isAuthenticated ? <Outlet /> : <Navigate to="/sign-in" />;
 };

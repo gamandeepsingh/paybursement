@@ -8,9 +8,8 @@ import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
   const dispatch = useDispatch()
-  const currentUSer = useSelector((state: RootState) => state.user.currentUser)
+  const currentUser = useSelector((state: RootState) => state.user.currentUser)
   const navigate = useNavigate();
-  console.log(currentUSer);
   
   const [formData,setFormData] = useState({
     email: '',
@@ -33,7 +32,7 @@ const SignIn = () => {
       const {user,token} = await res.data;
       localStorage.setItem('token',token);
       dispatch(signInSuccess(user))
-      toast.error("Sign in successful")
+      toast.success("Sign in successful")
       navigate('/dashboard')
     } catch (error) {
       dispatch(signInFailure("Invalid credentials"))
@@ -45,7 +44,7 @@ const SignIn = () => {
     <div className="container relative h-screen p-5 flex-col items-center justify-center grid max-w-none lg:grid-cols-2 lg:px-5">
       <span
       onClick={()=>navigate('/sign-up')}
-      className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 h-9 px-4 py-2 absolute right-4 top-4 md:right-8 md:top-8 bg-gray-500/20 dark:bg-gray-500/50 ">
+      className="inline-flex cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 h-9 px-4 py-2 absolute right-4 top-4 md:right-8 md:top-8 bg-gray-500/20 dark:bg-gray-500/50 ">
         Register
       </span>
       <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">

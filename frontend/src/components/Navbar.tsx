@@ -24,6 +24,7 @@ const Navbar = () => {
   const handleToggle = () => {
     dispatch(toggleTheme());
   };
+  
   const handleDialogToggle = () => {
     setIsDialogVisible((prev: boolean) => !prev);
   };
@@ -70,7 +71,7 @@ const Navbar = () => {
       {/* Navbar links */}
       <div className="flex gap-1 sm:gap-6 px-6">
         <a
-          href="#"
+          href="/"
           rel="nofollow"
           className="text-sm w-12 hover:text-secondary transition-colors flex flex-col gap-1 items-center"
         >
@@ -91,7 +92,7 @@ const Navbar = () => {
           <span className="text-xs">Home</span>
         </a>
         <a
-          href="#"
+          href="/dashboard"
           rel="nofollow"
           className="text-sm w-12 hover:text-secondary transition-colors flex flex-col gap-1 items-center"
         >
@@ -109,7 +110,7 @@ const Navbar = () => {
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
-          <span className="text-xs">Shop</span>
+          <span className="text-xs">Dashboard</span>
         </a>
         <a
           href="#"

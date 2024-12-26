@@ -8,9 +8,8 @@ import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   const dispatch = useDispatch()
-  const currentUSer = useSelector((state: RootState) => state.user.currentUser)
+  const currentUser = useSelector((state: RootState) => state.user.currentUser)
   const navigate = useNavigate()
-  console.log(currentUSer);
   
   const [formData,setFormData] = useState({
     email: '',
@@ -28,7 +27,6 @@ const SignUp = () => {
 
   const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(formData);
     
     try {
       if(formData.email === '' || formData.password === '' || formData.firstname==='') return toast.error("Please fill in all fields")
