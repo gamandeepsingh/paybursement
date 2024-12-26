@@ -1,14 +1,12 @@
-import { RootState } from "@/redux/store";
 import { signInFailure, signInStart, signInSuccess } from "@/redux/user/userSlice";
 import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   const dispatch = useDispatch()
-  const currentUser = useSelector((state: RootState) => state.user.currentUser)
   const navigate = useNavigate()
   
   const [formData,setFormData] = useState({

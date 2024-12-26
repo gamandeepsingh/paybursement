@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux';
 import { signOutUserSuccess, updateUserSuccess } from './redux/user/userSlice';
