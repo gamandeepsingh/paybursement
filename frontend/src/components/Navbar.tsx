@@ -23,6 +23,12 @@ const Navbar = () => {
 
   const handleToggle = () => {
     dispatch(toggleTheme());
+    const root = document.documentElement;
+    if (theme === "dark") {
+      root.classList.add("dark");
+    } else {
+      root.classList.remove("dark");
+    }
   };
   
   const handleDialogToggle = () => {
@@ -69,7 +75,7 @@ const Navbar = () => {
         </button>
       </div>
       {/* Navbar links */}
-      <div className="flex gap-1 sm:gap-6 px-6">
+      <div className="flex gap-2 sm:gap-6 px-6">
         <a
           href="/"
           rel="nofollow"

@@ -1,14 +1,12 @@
-import { RootState } from "@/redux/store";
 import { signInFailure, signInStart, signInSuccess } from "@/redux/user/userSlice";
 import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   const dispatch = useDispatch()
-  const currentUser = useSelector((state: RootState) => state.user.currentUser)
   const navigate = useNavigate()
   
   const [formData,setFormData] = useState({
@@ -53,10 +51,10 @@ const SignUp = () => {
     }
   }
   return (
-    <div className="container relative h-screen p-5 flex-col items-center justify-center grid max-w-none lg:grid-cols-2 lg:px-5">
+    <div className="container relative h-screen p-10 pt-16 flex-col items-center justify-center grid max-w-none lg:grid-cols-2 lg:px-5">
       <span
       onClick={()=>navigate('/sign-in')}
-      className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 h-9 px-4 py-2 absolute right-4 top-4 md:right-8 md:top-8 bg-gray-500/20 dark:bg-gray-500/50 cursor-pointer">
+      className="inline-flex mt-8 items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 h-9 px-4 py-2 absolute right-4 top-4 md:right-8 md:top-8 bg-gray-500/20 dark:bg-gray-500/50 cursor-pointer">
         Login
       </span>
       <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
@@ -146,7 +144,7 @@ const SignUp = () => {
                     name="email"
                     className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                     id="email"
-                    placeholder="name@example.com"
+                    placeholder="name@gmail.com"
                     onChange={handleChange}
                     autoCapitalize="none"
                     autoComplete="email"

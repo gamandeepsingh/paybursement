@@ -22,7 +22,7 @@ const Dashboard = () => {
     }, 200);
   }
   return (
-    <div className="w-screen min-h-[600px] bg-primarylight dark:bg-primaryDark relative">
+    <div className="w-screen min-h-[600px] mt-8 bg-primarylight dark:bg-primaryDark relative">
       <div className="bg-secondary dark:bg-primary">
         <div className="flex justify-between items-center py-5 px-10">
           <h1 className="text-2xl font-bold">Dashboard / <span className="text-xs">PB</span></h1>
