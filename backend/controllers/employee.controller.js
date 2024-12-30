@@ -12,7 +12,6 @@ const addEmployee = async (req, res) => {
   }
   try {
     const {
-      userId,
       firstname,
       lastname,
       email,
@@ -22,8 +21,9 @@ const addEmployee = async (req, res) => {
       schedule,
     } = req.body;
 
+    const user = await User.findById(req.user._id);
+    
     // Validate User Exists
-    const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -35,7 +35,7 @@ const addEmployee = async (req, res) => {
         frequency: schedule.frequency,
         nextRun: schedule.nextRun,
         status: schedule.status || "Active",
-        createdBy: userId,
+        createdBy: user._id,
       });
     }
 
@@ -46,7 +46,7 @@ const addEmployee = async (req, res) => {
       phone,
       bankDetails,
       salary,
-      createdBy: userId,
+      createdBy: user._id,
       scheduleId: createdSchedule?._id || null,
     });
 
@@ -81,6 +81,32 @@ const addEmployee = async (req, res) => {
   } catch (error) {
     console.error("Error adding employee:", error);
     res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+const getAllEmployeeDetails = async (req, res) => {
+  const { _id:userId } = req.user;
+
+  try {
+    // Check if the user exists
+    const user = await User.findById(userId).populate({
+      path: "employeesDetails.employeeId",
+      model: "employee",
+      populate: {
+        path: "transactionLogId",
+        model: "transactionLog", // Adjust this to your actual model
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Return employee details
+    res.status(200).json({ employees: user.employeesDetails });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
   }
 };
 
@@ -205,4 +231,4 @@ const addTransactionLog = async (req, res) => {
   }
 };
 
-module.exports = { addEmployee,getEmployeeDetails,addTransactionLog };
+module.exports = { addEmployee,getEmployeeDetails,addTransactionLog,getAllEmployeeDetails };

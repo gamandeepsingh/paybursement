@@ -8,9 +8,9 @@ import Navbar from './components/Navbar';
 import { Outlet } from 'react-router-dom';
 import Banner from './components/Banner';
 
-axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
+axios.defaults.baseURL = import.meta.env.VITE_BASE_URL || "http://localhost:3000";
 axios.defaults.withCredentials = true;
-axios.defaults.headers.common['X-API-Key'] = import.meta.env.VITE_BACKEND_API_KEY; 
+// axios.defaults.headers.common['X-API-Key'] = import.meta.env.VITE_BACKEND_API_KEY || ""; 
 
 function App() {
   const dispatch = useDispatch();
@@ -29,20 +29,12 @@ function App() {
           withCredentials: true,
         });
         const data = res.data;
-  
-        if (!data.success) {
-          dispatch(signOutUserSuccess());
-          return;
-        }
-  
         dispatch(updateUserSuccess(data));
-        console.log("User data:", data);
       } catch (error) {
         console.error("Error checking token validity:", error);
         dispatch(signOutUserSuccess());
       }
     };
-  
     checkTokenValidity();
   }, [dispatch]);
 
