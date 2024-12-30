@@ -1,5 +1,4 @@
 import DashNav from "@/components/DashNav";
-import AddEmployee from "../components/AddEmployee";
 import { motion } from "framer-motion";
 import HeroSection from "@/components/HeroSection";
 import hero from "../assets/dashboard_illustration/2.png";
