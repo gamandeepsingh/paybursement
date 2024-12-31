@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { body } = require("express-validator");
 const {authenticateUser} = require("../middlewares/auth.middleware");
-const { addEmployee, getEmployeeDetails, addTransactionLog, getAllEmployeeDetails } = require("../controllers/employee.controller");
+const { addEmployee, getEmployeeDetails, updateEmployeeDetails, addTransactionLog, getAllEmployeeDetails, deleteEmployee } = require("../controllers/employee.controller");
 
 router.post("/add-employee",[
     body("firstname").isLength({min:3}).withMessage('First Name must be at least 3 characters long'),
@@ -19,6 +19,14 @@ router.get("/get-employee/:employeeId",[
     body("employeeId").isMongoId().withMessage('Invalid Employee ID'),
 ], authenticateUser, getEmployeeDetails);
 
+router.post("/update-employee/:employeeId",[
+    body("fullname.firstname").isLength({min:3}).withMessage('First Name must be at least 3 characters long'),
+    body("email").isEmail().withMessage('Invalid Email'),
+    body("phone").isMobilePhone().withMessage('Invalid Phone Number'),
+    body("bankDetails").isObject().withMessage('Invalid Bank Details'),
+    body("salary").isNumeric().withMessage('Invalid Salary'),
+    body("schedule").optional().isObject().optional().withMessage('Invalid Schedule'),
+],authenticateUser,updateEmployeeDetails);
 
 router.post("/add-transaction-log",[
     body("employeeId").isMongoId().withMessage('Invalid Employee ID'),
@@ -26,6 +34,8 @@ router.post("/add-transaction-log",[
     body("transactionId").isString().withMessage('Invalid Transaction ID'),
     body("userId").isMongoId().withMessage('Invalid User ID'),
 ], authenticateUser, addTransactionLog);
+
+router.delete("/delete-employee/:employeeId",authenticateUser,deleteEmployee)
 
 
 

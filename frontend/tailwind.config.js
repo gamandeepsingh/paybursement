@@ -10,7 +10,7 @@ module.exports = {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		colors: {
-			primary:"#092635",
+			primary:"#000",
 			secondary:"#9EC8B9",
 			primarylight:"#F8FAFC",
 			primaryDark:"#1B4242",

@@ -4,6 +4,9 @@ import HeroSection from "@/components/HeroSection";
 import hero from "../assets/dashboard_illustration/2.png";
 import { useEffect, useState } from "react";
 import { heroMarqueeText } from "@/utils/constant";
+import { Stats } from "@/components/Stats";
+import { RecentActivity } from "@/components/RecentActivity";
+import { PaymentFlow } from "@/components/PaymentFlow";
 
 const Dashboard = () => {
   return (
@@ -20,8 +23,14 @@ const Dashboard = () => {
           <img src={hero} className="w-full" alt="" />
         </div>
       </div>
-      {/* <AddEmployee /> */}
-    </div>
+
+      <Stats />
+        
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <RecentActivity />
+          <PaymentFlow />
+        </div>
+      </div>
   );
 };
 

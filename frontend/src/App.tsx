@@ -7,6 +7,7 @@ import { Toaster } from 'react-hot-toast';
 import Navbar from './components/Navbar';
 import { Outlet } from 'react-router-dom';
 import Banner from './components/Banner';
+import { Footer } from './components/Footer';
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL || "http://localhost:3000";
 axios.defaults.withCredentials = true;
@@ -54,6 +55,7 @@ function App() {
     <Banner/>
     <Navbar/>
     <Outlet />
+    <Footer/>
       <Toaster
           position="top-center"
           toastOptions={{
