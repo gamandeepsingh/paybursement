@@ -80,7 +80,6 @@ const Employees: React.FC = () => {
     fetchEmployees();
   }, []);
 
-  if (loading) return toast.loading("Refresingh employee data");
   if (error) return toast.error(error);
 
   return (
@@ -95,7 +94,10 @@ const Employees: React.FC = () => {
           Add New Employee
         </Button>
       </div>
-      <Table>
+      {
+        loading ? 
+        <div className="text-center">Loading...</div>:
+        <Table>
         <TableCaption>A list of your employees.</TableCaption>
         <TableHeader>
           <TableRow>
@@ -126,6 +128,7 @@ const Employees: React.FC = () => {
           }
         </TableBody>
       </Table>
+      }
 
       {showAddEmployeeForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
