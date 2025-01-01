@@ -6,6 +6,7 @@ import Loader from "@/components/Loader/Loader";
 import Employees from "@/pages/Employees";
 import EmployeeDetails from "@/pages/EmployeeDetails";
 import Profile from "@/pages/Profile";
+import TotalAmount from "@/pages/Transactions";
 const Dashboard = lazy(() => import("../pages/Dashboard"));
 const SignIn = lazy(() => import("../pages/SignIn"));
 const SignUp = lazy(() => import("../pages/SignUp"));
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
                     {
                         path:"/employee/:id",
                         element:<EmployeeDetails/>
+                    },
+                    {
+                        path:"/transactions/logs",
+                        element:<TotalAmount/>
                     },
                 ]
             }

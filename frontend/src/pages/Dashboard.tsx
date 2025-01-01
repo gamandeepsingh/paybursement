@@ -2,6 +2,10 @@ import DashNav from "@/components/DashNav";
 import { motion } from "framer-motion";
 import HeroSection from "@/components/HeroSection";
 import hero from "../assets/dashboard_illustration/2.png";
+import illustration1 from "../assets/dashboard_illustration/11.png";
+import illustration2 from "../assets/dashboard_illustration/12.png";
+import illustration3 from "../assets/dashboard_illustration/13.png";
+import illustration4 from "../assets/dashboard_illustration/14.png";
 import { useEffect, useState } from "react";
 import { heroMarqueeText } from "@/utils/constant";
 import { Stats } from "@/components/Stats";
@@ -27,6 +31,27 @@ const Dashboard = () => {
     }
   }, [showToast]);
 
+  const floatingAnimation = {
+    y: ["-10%", "10%"],
+    transition: {
+      y: {
+        duration: 2,
+        repeat: Infinity,
+        repeatType: "reverse",
+        ease: "easeInOut"
+      }
+    }
+  };
+
+  const rotatingAnimation = {
+    rotate: [0, 360],
+    transition: {
+      duration: 20,
+      repeat: Infinity,
+      ease: "linear"
+    }
+  };
+
   
   return (
     <div className="w-screen min-h-screen bg-primarylight dark:bg-primary">
@@ -38,8 +63,32 @@ const Dashboard = () => {
             examples={heroMarqueeText}
           />
         </div>
-        <div className="grid place-content-center">
+        <div className="grid place-content-center relative">
           <img src={hero} className="w-full" alt="" />
+          <motion.img 
+            src={illustration1} 
+            className="absolute top-5 left-5 w-14 sm:w-20" 
+            alt="" 
+            animate={floatingAnimation}
+          />
+          <motion.img 
+            src={illustration2} 
+            className="absolute top-5 right-10 w-14 sm:w-20" 
+            alt="" 
+            animate={rotatingAnimation}
+          />
+          <motion.img 
+            src={illustration4} 
+            className="absolute bottom-10 left-16 w-14 sm:w-20" 
+            alt="" 
+            animate={rotatingAnimation}
+          />
+          <motion.img 
+            src={illustration3} 
+            className="absolute bottom-20 right-20 w-14 sm:w-20 hidden sm:block" 
+            alt="" 
+            animate={floatingAnimation}
+          />
         </div>
       </div>
 

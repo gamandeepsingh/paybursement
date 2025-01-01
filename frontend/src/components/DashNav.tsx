@@ -84,7 +84,7 @@ const DashNav = () => {
                 {currentUser?.fullname?.firstname}{" "}
                 {currentUser?.fullname?.lastname}
               </p>
-              <Link to="/profile" className="text-sm text-primarylight hover:opacity-70 transition-opacity duration-200 mt-2 block">
+              <Link to="/profile" className="text-sm text-primary dark:text-primarylight hover:opacity-70 transition-opacity duration-200 mt-2 block">
               ● Profile Setting
               </Link>
               <button

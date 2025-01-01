@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { toggleTheme } from "@/redux/user/themeSlice";
 import { IoClose } from "react-icons/io5";
 import { RxHamburgerMenu } from "react-icons/rx";
+import { Link } from "react-router-dom";
 
 const navLinks = [
   {
@@ -53,7 +54,7 @@ const dialogLinks = {
     { href: "/employees", label: "Employees" },
     { href: "#", label: "Total Amount" },
     { href: "#", label: "History" },
-    { href: "#", label: "Pending" },
+    { href: "/transactions/logs", label: "Transactions" },
   ],
   employee: [
     { href: "#", label: "Complete" },
@@ -78,8 +79,10 @@ const Navbar = () => {
     const root = document.documentElement;
     if (theme === "dark") {
       root.classList.add("dark");
+      localStorage.setItem("themeMode", "dark");
     } else {
       root.classList.remove("dark");
+      localStorage.setItem("themeMode", "light");
     }
   }, [theme]);
 
@@ -157,14 +160,14 @@ const Navbar = () => {
             <div key={index} className="flex flex-col gap-2 w-1/3">
               <h4 className="text-sm mb-2 font-semibold">{section.charAt(0).toUpperCase() + section.slice(1)}</h4>
               {links.map((link, linkIndex) => (
-                <a
+                <Link
                   key={linkIndex}
-                  href={link.href}
+                  to={link.href}
                   rel="nofollow"
                   className="text-sm hover:text-secondary transition-colors flex items-center gap-2"
                 >
                   {link.label}
-                </a>
+                </Link>
               ))}
               {section === "other" && (
                 <span
