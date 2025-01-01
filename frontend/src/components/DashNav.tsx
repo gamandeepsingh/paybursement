@@ -1,9 +1,9 @@
+import { useState, useEffect, useRef } from "react";
 import { RootState } from "@/redux/store";
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { signOutUserSuccess } from "@/redux/user/userSlice";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
 
@@ -11,15 +11,22 @@ const DashNav = () => {
   const dispatch = useDispatch();
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
   const [openBox, setOpenBox] = useState(false);
-  const location = useLocation();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const boxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (location.state?.showToast) {
-      toast.success("Successfully Logged in");
-    }
-  }, [location.state]);
+    const handleClickOutside = (event: MouseEvent) => {
+      if (boxRef.current && !boxRef.current.contains(event.target as Node)) {
+        setOpenBox(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleSignOut = async () => {
     setLoading(true);
@@ -36,6 +43,7 @@ const DashNav = () => {
       setLoading(false);
     }
   };
+
   return (
     <div className="mt-8 bg-secondary dark:bg-primaryDark">
       <div className="flex justify-between items-center py-5 px-10 relative">
@@ -59,30 +67,36 @@ const DashNav = () => {
             onClick={() => setOpenBox((pv) => !pv)}
           />
         </div>
-        {openBox && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            transition={{ duration: 0.2 }}
-            className="z-50 absolute right-12 top-16 bg-white dark:bg-secondary shadow-lg rounded-lg p-5 w-52"
-          >
-            <h1 className="text-lg font-bold">Profile</h1>
-            <hr className="my-3 border-neutral-300" />
-            <p className="text-sm">
-              <span className="font-bold">Welcome,</span>{" "}
-              {currentUser?.fullname?.firstname}{" "}
-              {currentUser?.fullname?.lastname}
-            </p>
-            <button
-              className="w-full bg-primary text-white py-2 rounded-lg mt-3"
-              onClick={handleSignOut}
-              disabled={loading}
+        <AnimatePresence>
+          {openBox && (
+            <motion.div
+              ref={boxRef}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.2 }}
+              className="z-50 absolute right-12 top-16 bg-white dark:bg-secondary shadow-lg rounded-lg p-5 w-52"
             >
-              {loading ? "Signing out..." : "Sign Out"}
-            </button>
-          </motion.div>
-        )}
+              <h1 className="text-lg font-bold">Profile</h1>
+              <hr className="my-3 border-neutral-300" />
+              <p className="text-sm">
+                <span className="font-bold">Welcome,</span>{" "}
+                {currentUser?.fullname?.firstname}{" "}
+                {currentUser?.fullname?.lastname}
+              </p>
+              <Link to="/profile" className="text-sm text-primarylight hover:opacity-70 transition-opacity duration-200 mt-2 block">
+              ● Profile Setting
+              </Link>
+              <button
+                className="w-full bg-primary text-white py-2 rounded-lg mt-3"
+                onClick={handleSignOut}
+                disabled={loading}
+              >
+                {loading ? "Signing out..." : "Sign Out"}
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

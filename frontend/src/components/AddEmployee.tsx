@@ -6,7 +6,6 @@ import { InputWithLabel } from "@/components/AddEmployeeForm/InputWithLabel";
 import { BankDetailsSection } from "@/components/AddEmployeeForm/BankDetailsSection";
 import { ScheduleSection } from "@/components/AddEmployeeForm/ScheduleSection";
 import { X } from "lucide-react";
-import { useDispatch } from "react-redux";
 
 interface AddEmployeeProps {
   onClose: () => void;
@@ -30,7 +29,6 @@ interface FormData {
 }
 
 const AddEmployee: React.FC<AddEmployeeProps> = ({ onClose }) => {
-  const dispatch = useDispatch();
   const [formData, setFormData] = useState<FormData>({
     firstname: "",
     lastname: "",

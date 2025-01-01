@@ -199,8 +199,8 @@ const EmployeeDetails: React.FC = () => {
   ];
 
   return (
-    <div className="container mx-auto p-6 mt-10 mb-20">
-      <div className="my-4">
+    <div className="container mx-auto px-6 mt-10 mb-20">
+      <div className="mb-4 -ml-4">
         <Breadcrumb items={breadcrumbItems} />
       </div>
       <div className="flex items-center gap-4 mb-8 w-full justify-between">

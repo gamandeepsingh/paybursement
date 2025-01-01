@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   currentEmployees:  []
@@ -12,7 +12,7 @@ export const EmployeeSlice = createSlice({
       state.currentEmployees = action.payload;
     },
     updateEmployeeSuccess:(state,action) => {
-      // state.currentEmployees.push(action.payload)
+      state.currentEmployees = action.payload;
     },
     deleteEmployeeSuccess: (state) => {
       state.currentEmployees = [];

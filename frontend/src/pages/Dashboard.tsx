@@ -7,8 +7,27 @@ import { heroMarqueeText } from "@/utils/constant";
 import { Stats } from "@/components/Stats";
 import { RecentActivity } from "@/components/RecentActivity";
 import { PaymentFlow } from "@/components/PaymentFlow";
+import toast from "react-hot-toast";
 
 const Dashboard = () => {
+  const [showToast, setShowToast] = useState(false);
+
+  useEffect(() => {
+    const shouldShowToast = localStorage.getItem("showLoginToast");
+    if (shouldShowToast === "true") {
+      setShowToast(true);
+      localStorage.removeItem("showLoginToast");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (showToast) {
+      toast.success("Successfully Logged in");
+      setShowToast(false);
+    }
+  }, [showToast]);
+
+  
   return (
     <div className="w-screen min-h-screen bg-primarylight dark:bg-primary">
       <DashNav />
