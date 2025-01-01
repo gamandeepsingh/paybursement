@@ -97,8 +97,6 @@ const AddEmployee: React.FC<AddEmployeeProps> = ({ onClose }) => {
           schedule: { frequency: "Monthly", nextRun: "" },
         });
         toast.success("Employee added successfully!");
-        console.log(response.data);
-        // dispatch()
         onClose();
       }
     } catch (err) {
