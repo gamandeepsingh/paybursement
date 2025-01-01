@@ -13,9 +13,12 @@ export const useTransactions = () => {
 
   const fetchTransactions = async () => {
     try {
-      const response = await axios.get<{ transactions: Transaction[] }>(
-        "/api/transaction/logs"
-      );
+      const response = await axios.get<{ transactions: Transaction[] }>("/api/transaction/logs",{
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        withCredentials: true,
+      });
       setTransactions(response.data.transactions);
       setError(null);
     } catch (err) {
