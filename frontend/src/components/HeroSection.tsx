@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import bulb from "../assets/dashboard_illustration/15.png"
-//  <!-- Where Payments Meet Simplicity -->
+
 const HeroSection = () => {
   return (
       <h1 className="max-w-2xl text-4xl sm:text-5xl leading-snug relative">
@@ -11,7 +11,7 @@ const HeroSection = () => {
           <svg
             viewBox="0 0 286 73"
             fill="none"
-            className="absolute -left-2 -right-2 -top-2 bottom-0 translate-y-1"
+            className="absolute -left-2 -right-2 -top-1 bottom-0 translate-y-1"
           >
             <motion.path
               initial={{ pathLength: 0 }}

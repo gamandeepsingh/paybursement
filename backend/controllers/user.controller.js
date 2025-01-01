@@ -76,3 +76,61 @@ module.exports.logoutUser = async (req, res) => {
 module.exports.getUserProfile = async (req, res, next) => {
   res.status(200).json(req.user);
 };
+
+module.exports.updateUserProfile = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const updateFields = {};
+
+    // Check and update fullname
+    if (req.body.fullname) {
+      if (req.body.fullname.firstname) {
+        updateFields['fullname.firstname'] = req.body.fullname.firstname;
+      }
+      if (req.body.fullname.lastname) {
+        updateFields['fullname.lastname'] = req.body.fullname.lastname;
+      }
+    }
+
+    // Check and update email
+    if (req.body.email) {
+      updateFields.email = req.body.email;
+    }
+
+    // Check and update bank details
+    if (req.body.bankDetails) {
+      updateFields.bankDetails = {
+        ...user.bankDetails,
+        ...req.body.bankDetails
+      };
+    }
+
+    // Check and update other fields
+    const fieldsToUpdate = ['businessName', 'phone', 'gstNumber'];
+    fieldsToUpdate.forEach(field => {
+      if (req.body[field] !== undefined) {
+        updateFields[field] = req.body[field];
+      }
+    });
+
+    // Update the user profile
+    const updatedUser = await userModel.findByIdAndUpdate(
+      user._id,
+      { $set: updateFields },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found',success:false });
+    }
+
+    res.status(200).json({
+      message: 'User profile updated successfully',
+      user: updatedUser,
+      success:false
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error",success:false });
+  }
+};
+

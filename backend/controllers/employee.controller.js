@@ -3,6 +3,7 @@ const Employee = require("../models/employee.model");
 const Schedule = require("../models/schedule.model");
 const { validationResult } = require("express-validator");
 const TransactionLog = require("../models/transactionLog.model");
+const { default: mongoose } = require("mongoose");
 
 // Controller to Add Employee Details
 const addEmployee = async (req, res) => {
@@ -11,19 +12,12 @@ const addEmployee = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
   try {
-    const {
-      userId,
-      firstname,
-      lastname,
-      email,
-      phone,
-      bankDetails,
-      salary,
-      schedule,
-    } = req.body;
+    const { firstname, lastname, email, phone, bankDetails, salary, schedule } =
+      req.body;
+
+    const user = await User.findById(req.user._id);
 
     // Validate User Exists
-    const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -35,7 +29,7 @@ const addEmployee = async (req, res) => {
         frequency: schedule.frequency,
         nextRun: schedule.nextRun,
         status: schedule.status || "Active",
-        createdBy: userId,
+        createdBy: user._id,
       });
     }
 
@@ -46,7 +40,7 @@ const addEmployee = async (req, res) => {
       phone,
       bankDetails,
       salary,
-      createdBy: userId,
+      createdBy: user._id,
       scheduleId: createdSchedule?._id || null,
     });
 
@@ -84,6 +78,32 @@ const addEmployee = async (req, res) => {
   }
 };
 
+const getAllEmployeeDetails = async (req, res) => {
+  const { _id: userId } = req.user;
+
+  try {
+    // Check if the user exists
+    const user = await User.findById(userId).populate({
+      path: "employeesDetails.employeeId",
+      model: "employee",
+      populate: {
+        path: "transactionLogId",
+        model: "transactionLog", // Adjust this to your actual model
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Return employee details
+    res.status(200).json({ employees: user.employeesDetails });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
 const getEmployeeDetails = async (req, res) => {
   try {
     const { employeeId } = req.params;
@@ -108,7 +128,9 @@ const getEmployeeDetails = async (req, res) => {
     });
 
     if (!user) {
-      return res.status(404).json({ message: "User with this employee not found" });
+      return res
+        .status(404)
+        .json({ message: "User with this employee not found" });
     }
 
     // Extract employee details from the user document
@@ -136,73 +158,160 @@ const getEmployeeDetails = async (req, res) => {
   }
 };
 
-const addTransactionLog = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-
-  const { employeeId, userId, amount, transactionId } = req.body;
-
+const updateEmployeeDetails = async (req, res) => {
   try {
-    // Validate inputs
-    if (!employeeId || !userId || !amount || !transactionId) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-    const employee = await Employee.findById(employeeId);
-    if (!employee) {
-      return res.status(404).json({ message: "Employee not found" });
-    }
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    const { employeeId } = req.params;
+    const {id:userId} = req.user; 
+    const updateData = req.body;
 
-    // Create the transaction log
-    const transactionLog = new TransactionLog({
-      employeeId,
-      processedBy: userId,
-      amount,
-      status: "Success", // Assuming the transaction was successful
-      transactionId,
+    // Check if the user has this employee
+    const user = await User.findOne({
+      _id: userId,
+      "employeesDetails.employeeId": employeeId,
     });
 
-    await transactionLog.save();
+    if (!user) {
+      return res
+        .status(404)
+        .json({
+          message:
+            "Employee not found or you don't have permission to update this employee",
+        });
+    }
 
-    // Update the employee's transaction logs
-    employee.transactionLogId.push(transactionLog._id);
-    await employee.save();
-
-    // Update the user's employeesDetails
-    const employeeDetail = user.employeesDetails.find(
-      (detail) => detail.employeeId.toString() === employeeId
+    // Update employee details
+    const updatedEmployee = await Employee.findByIdAndUpdate(
+      employeeId,
+      { $set: updateData },
+      { new: true, runValidators: true }
     );
 
-    if (employeeDetail) {
-      employeeDetail.transactionLogId.push({
-        id: transactionLog._id,
-        createdAt: transactionLog.createdAt,
-      });
-    } else {
-      user.employeesDetails.push({
-        employeeId,
-        transactionLogId: [
-          { id: transactionLog._id, createdAt: transactionLog.createdAt },
-        ],
-      });
+    if (!updatedEmployee) {
+      return res.status(404).json({ message: "Employee not found" });
     }
 
-    await user.save();
+    // If schedule is being updated, update or create a new schedule
+    if (updateData.schedule) {
+      if (updatedEmployee.scheduleId) {
+        await Schedule.findByIdAndUpdate(
+          updatedEmployee.scheduleId,
+          { $set: updateData.schedule },
+          { runValidators: true }
+        );
+      } else {
+        const newSchedule = new Schedule({
+          ...updateData.schedule,
+          createdBy: employeeId,
+        });
+        const savedSchedule = await newSchedule.save();
+        updatedEmployee.scheduleId = savedSchedule._id;
+        await updatedEmployee.save();
+      }
+    }
 
-    // Return success response
     res.status(200).json({
-      message: "Transaction log added successfully",
-      transactionLog,
+      message: "Employee details updated successfully",
+      employee: updatedEmployee,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal server error", error: error.message });
+    console.error("Error updating employee details:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
-module.exports = { addEmployee,getEmployeeDetails,addTransactionLog };
+const deleteEmployee = async (req, res) => {
+  const { employeeId } = req.params;
+  const userId = req.user._id;
+
+  try {
+    // Step 1: Find the employee
+    const employee = await Employee.findById(employeeId);
+
+    if (!employee) {
+      return res.status(404).json({ error: "Employee not found" });
+    }
+
+    // Step 2: Remove references from user documents
+    const userUpdateResult = await User.updateOne(
+      { _id: userId },
+      { $pull: { employeesDetails: { employeeId: new mongoose.Types.ObjectId(employeeId) } } }
+    );
+
+    if (userUpdateResult.modifiedCount === 0) {
+      return res.status(400).json({ error: "Failed to update user employee details" });
+    }
+
+    // Step 3: Delete related schedules and transaction logs
+    if (employee.scheduleId) {
+      await Schedule.findByIdAndDelete(employee.scheduleId);
+    }
+
+    if (employee.transactionLogId.length > 0) {
+      await TransactionLog.deleteMany({
+        _id: { $in: employee.transactionLogId },
+      });
+    }
+
+    // Step 4: Delete the employee
+    await Employee.findByIdAndDelete(employeeId);
+
+    return res.status(200).json({ message: "Employee and associated data deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting employee:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
+const addTransactionLog = async (req, res) => {
+  const { employeeId } = req.params;
+  const user = req.user;
+
+  if (!mongoose.Types.ObjectId.isValid(employeeId)) {
+    return res.status(400).json({ error: "Invalid employee ID" });
+  }
+
+  try {
+    // Step 1: Find and delete the employee
+    const employee = await Employee.findById(employeeId);
+
+    if (!employee) {
+      return res.status(404).json({ error: "Employee not found" });
+    }
+
+
+    // Step 2: Remove references from user documents
+    await user.updateOne(
+      { "employeesDetails.employeeId": employeeId },
+      { $pull: { employeesDetails: { employeeId: employeeId } } }
+    );
+
+    // Step 3: Delete related schedules and transaction logs
+    if (employee.scheduleId) {
+      await Schedule.findByIdAndDelete(employee.scheduleId);
+    }
+
+    if (employee.transactionLogId.length > 0) {
+      await TransactionLog.deleteMany({
+        _id: { $in: employee.transactionLogId },
+      });
+    }
+
+    // Step 4: Delete the employee
+    await Employee.findByIdAndDelete(employeeId);
+
+    return res.status(200).json({ message: "Employee and associated data deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting employee:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+module.exports = {
+  addEmployee,
+  getEmployeeDetails,
+  addTransactionLog,
+  deleteEmployee,
+  getAllEmployeeDetails,
+  updateEmployeeDetails,
+};

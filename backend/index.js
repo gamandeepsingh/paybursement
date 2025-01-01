@@ -7,13 +7,14 @@ const connectDB = require("./db/db.js");
 const userRoute = require("./routes/user.routes.js");
 const authRoute = require("./routes/auth.routes.js");
 const employeeRoute = require("./routes/employee.routes.js");
+const transactionRoute = require("./routes/transaction.routes.js");
 const paymentRoute = require("./routes/razorpay.routes.js");
 const cookieParser = require('cookie-parser');
 const port = process.env.PORT || 3000;
 connectDB();
 
 app.use(cors({
-  origin: process.env.ORIGINS.split(',') || "http://localhost:5173",
+  origin: process.env.ORIGINS && process.env.ORIGINS.split(',') || "http://localhost:5173",
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
@@ -26,6 +27,7 @@ app.use("/api/user",userRoute);
 app.use("/api/auth",authRoute);
 app.use("/api/employee",employeeRoute);
 app.use("/api/payment",paymentRoute);
+app.use("/api/transaction",transactionRoute);
 
 app.get("/", (req, res) => {
   res.send("Server is Listening");
